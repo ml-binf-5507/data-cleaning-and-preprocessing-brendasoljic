@@ -466,3 +466,8 @@ if __name__ == "__main__":
         impute_strategy=args.impute,
         random_state=args.random_state
     )
+
+# I wasn't sure where to put the AI Disclosure:
+
+# I used ChatGPT, asking it to clarify the instructions / where to place the code. I have never used GitHub before, so I wasnt sure if I copy this into VSCode or do it directly in GitHub.
+# I also used to ask how I can test the code to see if it works. It said to go to the actions tab, but I didn't see that anywhere. Now as I'm looking again, I see it as a button at the top of the page. 
