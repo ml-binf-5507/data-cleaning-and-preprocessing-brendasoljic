@@ -85,7 +85,15 @@ def detect_feature_types(df: pd.DataFrame, target: str, id_cols: List[str]) -> T
     # 3. Identify numeric columns (dtype in [int, float]):
     #    num_cols = [c for c in feature_cols if df[c].dtype in ['int64', 'float64']]
     # 4. Return (cat_cols, num_cols)
-    pass
+
+def detect_feature_types(df: pd.DataFrame, target: str, id_cols: List[str]) -> Tuple[List[str], List[str]]
+    feature_cols = [c for c in df.columns if c not in id_cols and c !=target] 
+    
+cat_cols = [c for c in feature_cols if df[c].dtype == "object"]
+num_cols = [c for c in feature_cols if df[c].dtype in ["int64", "float64"]]
+
+return cat_cols
+return num_cols
 
 
 # ============================================================================
@@ -121,7 +129,23 @@ def encode_categorical(df: pd.DataFrame, cat_cols: List[str]) -> Tuple[pd.DataFr
     # HINT: When called in run_preprocessing(), you encode TRAIN first to get column names,
     # then when encoding TEST, you should only create those same columns (don't add new ones).
     # You can use pd.get_dummies(..., columns=...) or post-process to match columns.
-    pass
+
+def encode_categorical(df: pd.DataFrame, cat_cols: List[str]) -> Tuple[pd.DataFrame, List[str]]:
+    df_encoded = df.copy()
+
+if not cat_cols:
+    return df_encoded, []
+
+encoded_cols_names: List[str] =[]
+
+for col in cat_cols:
+    encoded = pd.get_dummies(df_encoded[col], prefix = col, dtype = int)
+    df_encoded = df_encoded.drop(columns=[col])
+    df_encoded = pd.concat ([df_encoded, encoded], axis=1)
+    encoded_col_names.extend(encoded.columns.tolist())
+
+return df_encoded
+return encoded_col_names
 
 
 # ============================================================================
@@ -148,7 +172,24 @@ def scale_numeric(df: pd.DataFrame, num_cols: List[str]) -> Tuple[pd.DataFrame, 
     #    b. Calculate mean and std: mean = col.mean(), std = col.std()
     #    c. Standardize: (col - mean) / std
     # 3. Return (scaled_df, means_dict, stds_dict)
-    pass
+
+def scale_numeric(df: pd.DataFrame, num_cols: List[str]) -> Tuple[pd.DataFrame, Dict[str, float], Dict[str, float]]:
+    df_scaled = df.copy()
+    means: dict[str, float] = {}
+    stds: dict[str, float] = {}
+
+    for col in num_cols:
+        df_scaled[col] = df_scaled[col].fillna(col.median())
+        mean = float(df_scaled[col].mean())
+        std = flat(df_scaled[col.std())
+        means[col] - mean
+        stds[col] = std if std !=0 else 1.0
+
+        df_scaled[col] = (df_scaled[col] - means[col])/stds[col]
+
+return df_scaled
+return means
+return stds
 
 
 # ============================================================================
